@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CityPulse</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="container brand">
+      <div class="brand-left">
+        <div>
+          <h1>URBAN AI</h1>
+          <small>Urban Development Optimised</small>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="index.html">Suite</a>
+        <a href="#">About Us</a>
+        <a href="#">Pricing</a>
+        <a href="#">Demo</a>
+        <a href="#">Meet the Team</a>
+        <a href="#">FAQs</a>
+        <a href="#">Contact Us</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="section-title">WELCOME TO CITYPULSE</div>
+    <div class="two-col" style="margin:16px 0 40px">
+      <aside class="card">
+        <div class="card-body">
+          <div class="form-group">
+            <label for="link">Insert link of website</label>
+            <textarea id="link" placeholder="Enter Link"></textarea>
+          </div>
+
+          <div class="form-group">
+            <div class="pill-tabs">
+              <input type="radio" name="mode" id="tab1" checked>
+              <label for="tab1">Word Cloud</label>
+              <input type="radio" name="mode" id="tab2">
+              <label for="tab2">Sentiment Analysis</label>
+            </div>
+          </div>
+
+          <h3 style="margin-top:18px">Launch Analysis</h3>
+          <div class="form-row">
+            <button class="btn">Cancel</button>
+            <button class="btn primary">Launch</button>
+          </div>
+
+          <div class="icon-row" style="margin:18px 0">
+            <span>𝌆</span><span>⚙️</span><span>❕</span><span>🔖</span>
+          </div>
+
+          <div class="card notice-card">
+            <strong>Something not working?</strong>
+            <p>Click the button to report.</p>
+            <button class="btn">Report</button>
+          </div>
+        </div>
+      </aside>
+
+      <section class="card">
+        <div class="card-body">
+          <div class="placeholder">
+            <div class="wordcloud">
+              <div style="font-size:42px">potholes • sustainable • greenery • traffic</div>
+              <div>busy • parks • roads • creative • industrial • well‑planned • messy • crowded</div>
+              <div>factories • navigation • problematic • haphazard • impractical</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script src="citypulse-connection.js"></script>
+</body>
+</html>
