@@ -1,15 +1,10 @@
-// PlanIt Frontend-Backend Connection JavaScript
-// Save this as: planit-connection.js
-
 const API_BASE = 'http://localhost:8000';
 
-// DOM elements
 const generateBtn = document.querySelector('.btn.primary');
 const reportBtn = document.querySelector('.notice-card .btn');
 const arPlaceholder = document.querySelector('.placeholder');
 const kpiContainer = document.querySelector('.kpi');
 
-// Generate AR Street View
 generateBtn.addEventListener('click', async function() {
     const city = document.getElementById('city').value;
     const street = document.getElementById('street').value;
@@ -18,7 +13,6 @@ generateBtn.addEventListener('click', async function() {
     const notes = document.getElementById('notes').value;
     const termsAccepted = document.getElementById('terms').checked;
 
-    // Validation
     if (!city || !street) {
         alert('Please enter both city and street information');
         return;
@@ -29,7 +23,6 @@ generateBtn.addEventListener('click', async function() {
         return;
     }
 
-    // Show loading
     generateBtn.textContent = 'Generating AR View...';
     generateBtn.disabled = true;
 
@@ -54,7 +47,7 @@ generateBtn.addEventListener('click', async function() {
             // Update AR placeholder
             arPlaceholder.innerHTML = `
                 <div style="background: linear-gradient(45deg, #4CAF50, #2196F3); 
-                           color: white; padding: 20px; border-radius: 12px; text-align: center;">
+                        color: white; padding: 20px; border-radius: 12px; text-align: center;">
                     <h3>🏙️ AR Street View Generated</h3>
                     <p><strong>📍 Location:</strong> ${result.location}</p>
                     <p><strong>👁️ AR Mode:</strong> ${result.ar_mode} | <strong>📋 Version:</strong> ${result.scenario_version}</p>
@@ -79,8 +72,6 @@ generateBtn.addEventListener('click', async function() {
                     <small>Generated: ${new Date(result.generated_at).toLocaleString()}</small>
                 </div>
             `;
-
-            // Update street conditions in KPI
             const conditions = result.street_conditions;
             kpiContainer.innerHTML = `
                 <h4>Updated 1m ago</h4>

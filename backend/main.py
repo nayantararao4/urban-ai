@@ -1,5 +1,3 @@
-# Replace your current main.py with this ENTIRE file:
-
 from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
@@ -54,31 +52,20 @@ class ZonerQueryRequest(BaseModel):
 def root():
     return {"message": "Urban Planning AI Backend is Running!", "status": "success"}
 
-# TOOL 1: CityPulse - Word Cloud & Sentiment Analysis
+#citypulse
 @app.post("/citypulse")
 def analyze_website_content(request: SocialAnalysisRequest):
     try:
-        # Scrape the website
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
         response = requests.get(request.text, headers=headers, timeout=10)
-        
-        # Parse HTML
         soup = BeautifulSoup(response.content, 'html.parser')
-        
-        # Extract text
         for script in soup(["script", "style"]):
             script.decompose()
         text = soup.get_text()
-        
-        # Clean text
         lines = (line.strip() for line in text.splitlines())
         chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
         text = ' '.join(chunk for chunk in chunks if chunk)
-        
-        # Limit text length for API
         text = text[:3000]
-        
-        # Analyze with OpenAI
         prompt = f"""
         Analyze this website content for urban planning keywords and sentiment.
         
@@ -87,8 +74,7 @@ def analyze_website_content(request: SocialAnalysisRequest):
         Return JSON with:
         1. "keywords": array of 15-20 urban planning related keywords found
         2. "sentiment": object with "positive", "neutral", "negative" percentages and "community_mood"
-        """
-        
+        """      
         response = openai.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -98,11 +84,7 @@ def analyze_website_content(request: SocialAnalysisRequest):
             max_tokens=500,
             temperature=0.3
         )
-        
-        # Parse AI response
         ai_result = response.choices[0].message.content
-        
-        # Try to extract JSON from response
         import json
         try:
             parsed = json.loads(ai_result)
@@ -145,11 +127,10 @@ def analyze_website_content(request: SocialAnalysisRequest):
             "message": f"Fallback analysis for {request.text} (Error: {str(e)})"
         }
 
-# TOOL 2: Zoner + CodeVault (Document Q&A) - ORIGINAL WORKING VERSION
+#zoner
 @app.post("/zoner/load-document")
 def load_zoner_document(request: ZonerLoadRequest):
     try:
-        # Mock document loading (replace with real document processing)
         document_data = {
             "document_type": request.document_type,
             "document_info": request.document_info,
@@ -183,16 +164,12 @@ def query_zoner_document(request: ZonerQueryRequest):
             "commercial": "Commercial development is permitted in designated C1 and C2 zones with ground floor retail mandatory along main streets. Mixed-use developments require special planning approval.",
             "default": f"According to the {request.document_type or 'zoning document'}, this regulation falls under Section 4.2 of the municipal planning guidelines. The specific requirements depend on the zone classification and intended use of the property."
         }
-        
-        # Simple keyword matching for demo
         query_lower = request.query.lower()
-        response_text = responses.get("default", responses["default"])
-        
+        response_text = responses.get("default", responses["default"])    
         for key, value in responses.items():
             if key in query_lower:
                 response_text = value
-                break
-        
+                break   
         query_response = {
             "query": request.query,
             "response": response_text,
@@ -208,9 +185,7 @@ def query_zoner_document(request: ZonerQueryRequest):
             ],
             "status": "success"
         }
-        
-        return query_response
-        
+        return query_response     
     except Exception as e:
         return {"error": str(e), "status": "error"}
 
@@ -239,7 +214,6 @@ def regenerate_zoner_response(request: ZonerQueryRequest):
 
 @app.post("/zoner/report-issue")
 def report_zoner_issue():
-    """Handle issue reports for Zoner"""
     try:
         return {
             "message": "Issue reported successfully",
@@ -249,11 +223,10 @@ def report_zoner_issue():
     except Exception as e:
         return {"error": str(e), "status": "error"}
 
-# TOOL 3: PlanIt (AR Street View Generator) - UPDATED
+#Planit
 @app.post("/planit")
 def generate_ar_street_view(request: PlanItRequest):
     try:
-        # Generate AR street view data
         ar_data = {
             "location": f"{request.street}, {request.city}",
             "scenario_version": request.version,
@@ -283,7 +256,6 @@ def generate_ar_street_view(request: PlanItRequest):
 
 @app.post("/planit/report-issue")
 def report_planit_issue():
-    """Handle issue reports for PlanIt"""
     try:
         return {
             "message": "Issue reported successfully",
@@ -293,7 +265,7 @@ def report_planit_issue():
     except Exception as e:
         return {"error": str(e), "status": "error"}
 
-# Test endpoints with sample data
+
 @app.get("/test/citypulse")
 def test_citypulse():
     sample = SocialAnalysisRequest(
@@ -304,19 +276,15 @@ def test_citypulse():
 
 @app.get("/test/zoner")
 def test_zoner():
-    # Test document load
     load_sample = ZonerLoadRequest(
         document_type="Zoning By-law",
         document_info="City of Toronto Zoning Bylaw 569-2013",
         upload_path="sample-bylaw.pdf"
     )
-    
-    # Test query
     query_sample = ZonerQueryRequest(
         query="What are the height restrictions for residential buildings?",
         document_type="Zoning By-law"
-    )
-    
+    ) 
     return {
         "load_test": load_zoner_document(load_sample),
         "query_test": query_zoner_document(query_sample)

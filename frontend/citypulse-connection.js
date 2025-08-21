@@ -1,5 +1,3 @@
-// CityPulse Simple Connection - Save as: citypulse-connection.js
-
 const API_BASE = 'http://localhost:8000';
 
 const linkTextarea = document.getElementById('link');
@@ -8,7 +6,6 @@ const reportBtn = document.querySelector('.notice-card .btn');
 const placeholder = document.querySelector('.placeholder');
 const wordCloudTab = document.getElementById('tab1');
 
-// Launch Analysis
 launchBtn.addEventListener('click', async function() {
     const websiteLink = linkTextarea.value.trim();
     
@@ -31,7 +28,6 @@ launchBtn.addEventListener('click', async function() {
 
         if (result.status === 'success') {
             if (wordCloudTab.checked) {
-                // Show Word Cloud
                 placeholder.innerHTML = `
                     <div class="wordcloud">
                         <div style="font-size:42px">${result.wordcloud.slice(0,4).join(' • ')}</div>
@@ -40,7 +36,6 @@ launchBtn.addEventListener('click', async function() {
                     </div>
                 `;
             } else {
-                // Show Sentiment
                 placeholder.innerHTML = `
                     <div style="padding: 20px; text-align: center;">
                         <h3>Sentiment Analysis</h3>

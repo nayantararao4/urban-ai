@@ -1,15 +1,10 @@
-// Zoner Frontend-Backend Connection JavaScript
-// Save this as: zoner-connection.js
-
 const API_BASE = 'http://localhost:8000';
 
-// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     initializeZoner();
 });
 
 function initializeZoner() {
-    // DOM elements with safer selection
     const loadDocBtn = document.querySelector('.btn.primary');
     const reportBtn = document.querySelector('.notice-card .btn:last-child');
     const regenerateBtn = document.querySelector('.notice-card .btn:not(:last-child)');
@@ -22,7 +17,6 @@ function initializeZoner() {
     const noticeCard = document.querySelector('.notice-card');
     const termsCheckbox = document.getElementById('terms2');
 
-    // Check if elements exist
     if (!loadDocBtn || !queryTextarea || !responseTextarea) {
         console.error('Required DOM elements not found. Make sure your HTML IDs match.');
         return;
@@ -31,7 +25,6 @@ function initializeZoner() {
     let currentDocumentLoaded = false;
     let currentQuery = '';
 
-    // Load Document
     loadDocBtn.addEventListener('click', async function(e) {
         e.preventDefault();
         
@@ -56,7 +49,6 @@ function initializeZoner() {
             return;
         }
 
-        // Show loading
         loadDocBtn.textContent = 'Loading Document...';
         loadDocBtn.disabled = true;
 
@@ -88,7 +80,6 @@ function initializeZoner() {
             if (result.status === 'success') {
                 currentDocumentLoaded = true;
                 
-                // Show success message in response area
                 responseTextarea.value = `✅ DOCUMENT LOADED SUCCESSFULLY\n\n` +
                     `📄 Type: ${result.document_type}\n` +
                     `📝 Info: ${result.document_info}\n` +
@@ -99,12 +90,10 @@ function initializeZoner() {
                     result.key_sections.map(section => `• ${section}`).join('\n') + 
                     `\n\n💡 You can now ask questions about this document!`;
 
-                // Update UI state
                 loadDocBtn.textContent = '✅ Document Loaded';
                 loadDocBtn.style.backgroundColor = '#4CAF50';
                 queryTextarea.placeholder = 'Ask questions about the loaded document...';
                 
-                // Enable query functionality
                 enableQueryMode();
 
                 if (responseBadge) {
@@ -128,9 +117,7 @@ function initializeZoner() {
         }
     });
 
-    // Enable query mode after document is loaded
     function enableQueryMode() {
-        // Remove existing listeners to prevent duplicates
         queryTextarea.removeEventListener('input', handleQueryInput);
         queryTextarea.removeEventListener('keypress', handleQuerySubmit);
         
@@ -149,7 +136,6 @@ function initializeZoner() {
         }
     }
 
-    // Handle Enter key for immediate query
     function handleQuerySubmit(event) {
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault();
@@ -158,7 +144,6 @@ function initializeZoner() {
         }
     }
 
-    // Submit query to backend
     async function submitQuery() {
         const query = queryTextarea.value.trim();
         
@@ -193,14 +178,13 @@ function initializeZoner() {
             console.log('Query response data:', result);
 
             if (result.status === 'success') {
-                // Display comprehensive response
                 responseTextarea.value = `🎯 QUERY: ${result.query}\n\n` +
                     `📋 ANALYSIS:\n${result.response}\n\n` +
                     `📊 Confidence: ${result.confidence_score}%\n\n` +
                     `📚 Relevant Sections:\n${result.relevant_sections.map(s => `• ${s}`).join('\n')}\n\n` +
                     `📖 Citations:\n${result.citations.map(c => `• ${c}`).join('\n')}`;
 
-                // Show response generated notice
+                // display response generated
                 if (responseBadge) {
                     responseBadge.textContent = '✅ Response Generated';
                     responseBadge.style.backgroundColor = '#4CAF50';
@@ -227,7 +211,7 @@ function initializeZoner() {
         }
     }
 
-    // Regenerate Response
+    // Response regeneration
     if (regenerateBtn) {
         regenerateBtn.addEventListener('click', async function(e) {
             e.preventDefault();
@@ -325,8 +309,6 @@ function initializeZoner() {
         });
     }
 }
-
-// Test function - call this in browser console to test
 function testZonerConnection() {
     fetch('http://localhost:8000/test/zoner')
         .then(response => response.json())
